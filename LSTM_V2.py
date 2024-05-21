@@ -47,7 +47,7 @@ X, y = load_data(csv_file, label_column)
 X, y = shuffle_data(X, y)
 
 # Dividir os dados em conjunto de treino e teste
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.40, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
 
 # Normalizar os dados
 scaler = StandardScaler()
@@ -66,7 +66,8 @@ model = build_lstm_model(input_shape)
 model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mae'])
 
 # Treinar o modelo
-model.fit(X_train, y_train, epochs=10, batch_size=4, validation_data=(X_test, y_test),  validation_split=0.20)
+#model.fit(X_train, y_train, epochs=10, batch_size=4, validation_data=(X_test, y_test),  validation_split=0.50)
+model.fit(X_train, y_train, epochs=20, batch_size=8, validation_data=(X_test, y_test))
 
 # Avaliar o modelo
 loss, mae = model.evaluate(X_test, y_test)

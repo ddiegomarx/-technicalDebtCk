@@ -88,7 +88,7 @@ model = build_cnn_model(input_shape, num_classes)
 model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # Treinar o modelo
-model.fit(X_train, y_train, epochs=10, batch_size=4, validation_data=(X_test, y_test))
+model.fit(X_train, y_train, epochs=4, batch_size=4, validation_data=(X_test, y_test))
 
 # Avaliar o modelo
 loss, mae = model.evaluate(X_test, y_test)

@@ -1,0 +1,5 @@
+Model: LSTM
+RMSE: 0.018224796922115413
+MAE: 0.008102372358602842
+MAPE: 0.2648515878966654
+Best Metric: <Sequential name=sequential_1, built=True>
