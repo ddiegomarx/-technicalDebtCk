@@ -4,21 +4,23 @@ from keras.models import Sequential
 from keras.layers import Dense, Conv1D, MaxPooling1D, Flatten
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+#from LSTM import shuffle_data
 
-# Carregar os dados do CSV
-def load_data(csv_file, label_column):
-    data = pd.read_csv(csv_file)
-    X = data.drop(columns=[label_column]).values  # Recursos (features)
-    y = data[label_column].values  # Rótulos (labels)
-    # Ajustar rótulos menores que 0 para 0
-    y = np.where(y < 0, 0, y)
-    return X, y
-
-# Função para misturar aleatoriamente as linhas do conjunto de dados
 def shuffle_data(X, y):
     indices = np.arange(X.shape[0])
     np.random.shuffle(indices)
     return X[indices], y[indices]
+
+# Carregar os dados do CSV
+def load_data(csv_file, label_column):
+    data = pd.read_csv(csv_file)
+    # Remover colunas com valores negativos ou todos os valores iguais a 0
+    data = data.loc[:, (data.gt(0).any() & (data.lt(0).sum() == 0))]
+    X = data.drop(columns=[label_column]).values  # Recursos (features)
+    y = data[label_column].values  # Rótulos (labels)
+    return X, y
 
 # Construir modelo CNN para dados tabulares
 def build_cnn_model(input_shape, num_classes):
@@ -32,8 +34,22 @@ def build_cnn_model(input_shape, num_classes):
     model.add(Dense(num_classes, activation='softmax'))
     return model
 
+# Função para calcular o RMSE
+def rmse(y_true, y_pred):
+    return sqrt(mean_squared_error(y_true, y_pred))
+
+# Função para calcular o MAPE
+def mape(y_true, y_pred): 
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    return np.mean(np.abs((y_true - y_pred) / (y_true + 1e-10))) * 100
+
+# Função para calcular o sMAPE
+def smape(y_true, y_pred):
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    return np.mean(2.0 * np.abs(y_true - y_pred) / (np.abs(y_true) + np.abs(y_pred))) * 100
+
 # Carregar e preparar os dados
-csv_file = r'C:\\TCC\\Output\\ML\\TD_BALANCED.csv'
+csv_file = r'C:\\TCC\\Output\\ML\\TD_IO.csv'
 label_column = 'TD'  # Substitua 'your_label_column' pelo nome do campo que é para ser usado como label
 X, y = load_data(csv_file, label_column)
 
@@ -47,7 +63,13 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 unique_labels = np.unique(y_train)
 label_map = {label: idx for idx, label in enumerate(unique_labels)}
 y_train = np.vectorize(label_map.get)(y_train)
-y_test = np.vectorize(label_map.get)(y_test)
+
+# Verificar se todos os valores em y_test existem em label_map
+missing_values = set(y_test) - set(label_map.keys())
+if missing_values:
+    print(f"Valores ausentes encontrados: {missing_values}")
+else:
+    y_test = np.vectorize(label_map.get)(y_test)
 # Normalizar os dados (opcional, mas recomendado para redes neurais)
 #scaler = StandardScaler()
 #X_train = scaler.fit_transform(X_train)
@@ -69,5 +91,15 @@ model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=
 model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_test, y_test))
 
 # Avaliar o modelo
-loss, accuracy = model.evaluate(X_test, y_test)
-print(f'Test Loss: {loss}, Test Accuracy: {accuracy}')
+loss, mae = model.evaluate(X_test, y_test)
+
+# Prever os valores de y
+y_pred = model.predict(X_test)
+
+# Converter probabilidades de classe para rótulos de classe
+y_pred = np.argmax(y_pred, axis=1)
+
+#print(f'Test Loss: {loss}, Test Accuracy: {accuracy}')
+print(f'Test MAE: {mae}')
+print(f'Test RMSE: {rmse(y_test, y_pred)}')
+print(f'Test MAPE: {smape(y_test, y_pred)}')

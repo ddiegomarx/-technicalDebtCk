@@ -25,7 +25,7 @@ def build_cnn_model(input_shape, num_classes):
     return model
 
 # Carregar e preparar os dados
-csv_file = r'C:\\TCC\\Output\\ML\\TD.csv'
+csv_file = r'C:\\TCC\\Output\\ML\\TD_IO.csv'
 X, y = load_data(csv_file)
 
 # Dividir os dados em conjunto de treino e teste
