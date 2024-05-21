@@ -39,7 +39,7 @@ def mape(y_true, y_pred):
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
 # Carregar e preparar os dados
-csv_file = r'C:\\TCC\\Output\\ML\\TD_IO.csv'  # Caminho para seu arquivo CSV
+csv_file = r'C:\\TCC\\Output\\ML\\TD.csv'  # Caminho para seu arquivo CSV
 label_column = 'TD'  # Substitua pelo nome do campo que é para ser usado como label
 X, y = load_data(csv_file, label_column)
 
@@ -66,7 +66,7 @@ model = build_lstm_model(input_shape)
 model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mae'])
 
 # Treinar o modelo
-model.fit(X_train, y_train, epochs=100, batch_size=8, validation_data=(X_test, y_test),  validation_split=0.20)
+model.fit(X_train, y_train, epochs=10, batch_size=4, validation_data=(X_test, y_test),  validation_split=0.20)
 
 # Avaliar o modelo
 loss, mae = model.evaluate(X_test, y_test)
@@ -75,6 +75,6 @@ loss, mae = model.evaluate(X_test, y_test)
 y_pred = model.predict(X_test)
 
 # Calcular e imprimir o RMSE e o MAPE
-print(f'Test MAE: {mae}')
-print(f'Test RMSE: {rmse(y_test, y_pred)}')
-print(f'Test MAPE: {mape(y_test, y_pred)}')
+print(f'LSTM validation MAE: {mae}')
+print(f'LSTM validation RMSE: {rmse(y_test, y_pred)}')
+print(f'LSTM validation MAPE: {mape(y_test, y_pred)}')

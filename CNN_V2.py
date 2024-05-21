@@ -49,7 +49,7 @@ def smape(y_true, y_pred):
     return np.mean(2.0 * np.abs(y_true - y_pred) / (np.abs(y_true) + np.abs(y_pred))) * 100
 
 # Carregar e preparar os dados
-csv_file = r'C:\\TCC\\Output\\ML\\TD_IO.csv'
+csv_file = r'C:\\TCC\\Output\\ML\\TD.csv'
 label_column = 'TD'  # Substitua 'your_label_column' pelo nome do campo que é para ser usado como label
 X, y = load_data(csv_file, label_column)
 
@@ -88,7 +88,7 @@ model = build_cnn_model(input_shape, num_classes)
 model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # Treinar o modelo
-model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_test, y_test))
+model.fit(X_train, y_train, epochs=10, batch_size=4, validation_data=(X_test, y_test))
 
 # Avaliar o modelo
 loss, mae = model.evaluate(X_test, y_test)
@@ -100,6 +100,6 @@ y_pred = model.predict(X_test)
 y_pred = np.argmax(y_pred, axis=1)
 
 #print(f'Test Loss: {loss}, Test Accuracy: {accuracy}')
-print(f'Test MAE: {mae}')
-print(f'Test RMSE: {rmse(y_test, y_pred)}')
-print(f'Test MAPE: {smape(y_test, y_pred)}')
+print(f'CNN validation MAE: {mae}')
+print(f'CNN validation RMSE: {rmse(y_test, y_pred)}')
+print(f'CNN validation MAPE: {smape(y_test, y_pred)}')
