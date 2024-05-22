@@ -38,7 +38,7 @@ X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
 X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], 1)
 
 # Definir o grid de parâmetros manualmente
-param_grid_cnn = {
+param_grid_cnn2 = {
     'filters': [32],
     'kernel_size': [3],
     'pool_size': [2],
@@ -49,7 +49,7 @@ param_grid_cnn = {
     'learning_rate': [0.01]
 }
 
-param_grid_cnn2 = {
+param_grid_cnn = {
     'filters': [32, 64, 128],
     'kernel_size': [3, 5, 7],
     'pool_size': [2, 3],
@@ -133,7 +133,7 @@ results = {
     }
 
 df_results = pd.DataFrame(results)
-df_results.to_csv(r'C:\\TCC\\Output\\ML\\cnn_best_params_metrics.csv', index=False)
+df_results.to_csv(r'C:\\TCC\\Output\\ML\\model_cnn_best_params_metrics.csv', index=False)
 
 # Imprimir os melhores hiperparâmetros e métricas
 print(f'Best parameters (CNN): filters={best_params_cnn[0]}, kernel_size={best_params_cnn[1]}, pool_size={best_params_cnn[2]}, units={best_params_cnn[3]}, dropout_rate={best_params_cnn[4]}, batch_size={best_params_cnn[5]}, epochs={best_params_cnn[6]}, learning_rate={best_params_cnn[7]}')

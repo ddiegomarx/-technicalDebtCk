@@ -58,7 +58,7 @@ X_test = X_test.reshape((X_test.shape[0], X_test.shape[1], 1))
 input_shape = (X_train.shape[1], 1)
 
 # Definir o grid de parâmetros manualmente
-param_grid = {
+param_grid2 = {
     'units': [32],
     'activation': ['sigmoid'],
     'optimizer': ['SGD'],
@@ -66,7 +66,7 @@ param_grid = {
     'batch_size': [8]
 }
 
-param_grid_2 = {
+param_grid = {
     'units': [32, 64, 128, 256, 512],
     'activation': ['relu', 'sigmoid'],
     'optimizer': ['adam', 'RMSprop', 'SGD'],
@@ -120,7 +120,7 @@ mape_value = mape(y_test, y_pred)
 
 # Salvar os resultados em um arquivo CSV
 results = {
-    'Modelo': ['CNN'],
+    'Modelo': ['LSTM'],
     'MAE': [mae_value],
     'REQM': [rmse_value],
     'MAPE': [mape_value],

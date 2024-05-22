@@ -32,10 +32,17 @@ X, y = shuffle_data(X, y)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.50, random_state=42)
 
 param_grid_rf = {
-    'n_estimators': [100, 200, 300],
+    'n_estimators': [100, 200, 400],
+    'max_depth': [None, 10, 20, 40],
+    'min_samples_split': [5, 10, 20, 30],
+    'min_samples_leaf': [2, 4, 8, 16]
+}
+
+param_grid_rf2 = {
+    'n_estimators': [100, 200, 300, 500],
     'max_depth': [None, 10, 20, 30],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4]
+    'min_samples_split': [2, 5, 10, 20],
+    'min_samples_leaf': [1, 2, 4, 8]
 }
 
 """"
@@ -85,7 +92,7 @@ for n_estimators in param_grid_rf['n_estimators']:
 
 # Salvar os resultados em um arquivo CSV
 results = {
-    'Modelo': ['CNN'],
+    'Modelo': ['Random Forest'],
     'MAE': [best_mae_rf],
     'REQM': [best_rmse_rf],
     'MAPE': [best_mape_rf],

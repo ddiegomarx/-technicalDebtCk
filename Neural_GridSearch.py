@@ -35,10 +35,18 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.50, random
 
 
 # Definir o grid de parâmetros manualmente
+param_grid_nn2 = {
+    'units': [50],
+    'dropout_rate': [0.2],
+    'batch_size': [32],
+    'epochs': [10],
+    'learning_rate': [0.001]
+}
+
 param_grid_nn = {
-    'units': [50, 100, 150],
+    'units': [50, 100, 150, 300, 500],
     'dropout_rate': [0.2, 0.3, 0.5],
-    'batch_size': [32, 64, 128],
+    'batch_size': [32, 64, 128, 256],
     'epochs': [10, 50, 100],
     'learning_rate': [0.001, 0.01, 0.1]
 }
@@ -101,7 +109,7 @@ for units in param_grid_nn['units']:
 
 # Salvar os resultados em um arquivo CSV
 results = {
-    'Modelo': ['CNN'],
+    'Modelo': ['ANNs'],
     'MAE': [best_mae_nn],
     'REQM': [best_rmse_nn],
     'MAPE': [best_mape_nn],
