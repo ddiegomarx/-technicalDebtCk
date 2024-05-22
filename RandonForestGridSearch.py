@@ -31,7 +31,6 @@ X, y = shuffle_data(X, y)
 # Dividir os dados em conjunto de treino e teste
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.50, random_state=42)
 
-# Definir o grid de parâmetros manualmente
 param_grid_rf = {
     'n_estimators': [100, 200, 300],
     'max_depth': [None, 10, 20, 30],
@@ -83,6 +82,19 @@ for n_estimators in param_grid_rf['n_estimators']:
                     best_mae_rf = mae_rf
                     best_mape_rf = mape_rf
                     best_params_rf = (n_estimators, max_depth, min_samples_split, min_samples_leaf)
+
+# Salvar os resultados em um arquivo CSV
+results = {
+    'Modelo': ['CNN'],
+    'MAE': [best_mae_rf],
+    'REQM': [best_rmse_rf],
+    'MAPE': [best_mape_rf],
+    'MSE': [best_mse_rf],
+     'Best parameters': [f'n_estimators={best_params_rf[0]}, max_depth={best_params_rf[1]}, min_samples_split={best_params_rf[2]}, min_samples_leaf={best_params_rf[3]}']
+}  
+
+df_results = pd.DataFrame(results)
+df_results.to_csv(r'C:\\TCC\\Output\\ML\\model_randonForest_best_params_metrics.csv', index=False)
 
 # Imprimir os melhores hiperparâmetros e métricas
 print(f'Best parameters (Random Forest): n_estimators={best_params_rf[0]}, max_depth={best_params_rf[1]}, min_samples_split={best_params_rf[2]}, min_samples_leaf={best_params_rf[3]}')

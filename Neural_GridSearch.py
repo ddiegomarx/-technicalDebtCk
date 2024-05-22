@@ -33,6 +33,7 @@ X, y = shuffle_data(X, y)
 # Dividir os dados em conjunto de treino e teste
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.50, random_state=42)
 
+
 # Definir o grid de parâmetros manualmente
 param_grid_nn = {
     'units': [50, 100, 150],
@@ -98,9 +99,22 @@ for units in param_grid_nn['units']:
                         best_mape_nn = mape_nn
                         best_params_nn = (units, dropout_rate, batch_size, epochs, learning_rate)
 
+# Salvar os resultados em um arquivo CSV
+results = {
+    'Modelo': ['CNN'],
+    'MAE': [best_mae_nn],
+    'REQM': [best_rmse_nn],
+    'MAPE': [best_mape_nn],
+    'MSE': [best_mse_nn],
+     'Best parameters': [f'units={best_params_nn[0]}, dropout_rate={best_params_nn[1]}, batch_size={best_params_nn[2]}, epochs={best_params_nn[3]}, learning_rate={best_params_nn[4]}']
+}  
+
+df_results = pd.DataFrame(results)
+df_results.to_csv(r'C:\\TCC\\Output\\ML\\model_neural_best_params_metrics.csv', index=False)
+
 # Imprimir os melhores hiperparâmetros e métricas
 print(f'Best parameters (Neural Network): units={best_params_nn[0]}, dropout_rate={best_params_nn[1]}, batch_size={best_params_nn[2]}, epochs={best_params_nn[3]}, learning_rate={best_params_nn[4]}')
 print(f'Best MSE (Neural Network): {best_mse_nn}')
 print(f'Best RMSE (Neural Network): {best_rmse_nn}')
-print(f'Best MAE (Neural Network): {best_mae_nn}')
 print(f'Best MAPE (Neural Network): {best_mape_nn}%')
+

@@ -118,6 +118,19 @@ rmse_value = rmse(y_test, y_pred)
 mae_value = mean_absolute_error(y_test, y_pred)
 mape_value = mape(y_test, y_pred)
 
+# Salvar os resultados em um arquivo CSV
+results = {
+    'Modelo': ['CNN'],
+    'MAE': [mae_value],
+    'REQM': [rmse_value],
+    'MAPE': [mape_value],
+    'MSE': [best_score],
+    'Best parameters': [f'units={best_params[0]}, activation={best_params[1]}, optimizer={best_params[2]}, epochs={best_params[3]}, batch_size={best_params[4]}']
+}  
+
+df_results = pd.DataFrame(results)
+df_results.to_csv(r'C:\\TCC\\Output\\ML\\model_LSTM_best_params_metrics.csv', index=False)
+
 print(f'LSTM validation RMSE: {rmse_value}')
 print(f'LSTM validation MAE: {mae_value}')
 print(f'LSTM validation MAPE: {mape_value}')

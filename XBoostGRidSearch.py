@@ -31,7 +31,6 @@ X, y = shuffle_data(X, y)
 # Dividir os dados em conjunto de treino e teste
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.50, random_state=42)
 
-# Definir o grid de parâmetros manualmente
 param_grid_xgb = {
     'n_estimators': [100, 200, 300],
     'max_depth': [3, 5, 7, 10],
@@ -88,6 +87,20 @@ for n_estimators in param_grid_xgb['n_estimators']:
                             best_mae_xgb = mae_xgb
                             best_mape_xgb = mape_xgb
                             best_params_xgb = (n_estimators, max_depth, learning_rate, subsample, colsample_bytree, min_child_weight)
+
+# Salvar os resultados em um arquivo CSV
+results = {
+    'Modelo': ['CNN'],
+    'MAE': [best_mae_xgb],
+    'REQM': [best_rmse_xgb],
+    'MAPE': [best_mape_xgb],
+    'MSE': [best_mse_xgb],
+     'Best parameters': [f'n_estimators={best_params_xgb[0]}, max_depth={best_params_xgb[1]}, learning_rate={best_params_xgb[2]}, subsample={best_params_xgb[3]}, colsample_bytree={best_params_xgb[4]}, min_child_weight={best_params_xgb[5]}']
+}  
+
+df_results = pd.DataFrame(results)
+df_results.to_csv(r'C:\\TCC\\Output\\ML\\model_xboost_best_params_metrics.csv', index=False)
+
 
 # Imprimir os melhores hiperparâmetros e métricas
 print(f'Best parameters (XGBoost): n_estimators={best_params_xgb[0]}, max_depth={best_params_xgb[1]}, learning_rate={best_params_xgb[2]}, subsample={best_params_xgb[3]}, colsample_bytree={best_params_xgb[4]}, min_child_weight={best_params_xgb[5]}')
