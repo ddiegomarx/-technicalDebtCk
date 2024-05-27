@@ -51,13 +51,13 @@ param_grid_cnn2 = {
 
 param_grid_cnn = {
     'filters': [32, 64, 128],
-    'kernel_size': [3, 5, 7],
+    'kernel_size': [5, 7],
     'pool_size': [2, 3],
     'units': [50, 100, 150],
-    'dropout_rate': [0.2, 0.3, 0.5],
-    'batch_size': [32, 64, 128],
-    'epochs': [10, 50, 100],
-    'learning_rate': [0.001, 0.01, 0.1]
+    'dropout_rate': [0.2, 0.3],
+    'batch_size': [32, 64],
+    'epochs': [ 50, 100],
+    'learning_rate': [0.01, 0.1]
 }
 
 """

@@ -4,6 +4,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from math import sqrt
+from tqdm import tqdm
+import itertools
 
 # Carregar os dados do CSV
 def load_data(csv_file, label_column):
@@ -41,7 +43,7 @@ param_grid_rf = {
 param_grid_rf2 = {
     'n_estimators': [100, 200, 300, 500],
     'max_depth': [None, 10, 20, 30],
-    'min_samples_split': [2, 5, 10, 20],
+    'min_samples_split': [2, 5, 10, 20, 30],
     'min_samples_leaf': [1, 2, 4, 8]
 }
 
@@ -78,17 +80,23 @@ best_rmse_rf = None
 best_mae_rf = None
 best_mape_rf = None
 
-for n_estimators in param_grid_rf['n_estimators']:
-    for max_depth in param_grid_rf['max_depth']:
-        for min_samples_split in param_grid_rf['min_samples_split']:
-            for min_samples_leaf in param_grid_rf['min_samples_leaf']:
-                mse_rf, rmse_rf, mae_rf, mape_rf = train_and_evaluate_rf(n_estimators, max_depth, min_samples_split, min_samples_leaf)
-                if mse_rf < best_mse_rf:
-                    best_mse_rf = mse_rf
-                    best_rmse_rf = rmse_rf
-                    best_mae_rf = mae_rf
-                    best_mape_rf = mape_rf
-                    best_params_rf = (n_estimators, max_depth, min_samples_split, min_samples_leaf)
+# Calculando o número total de combinações
+total_combinations = len(param_grid_rf['n_estimators']) * len(param_grid_rf['max_depth']) * len(param_grid_rf['min_samples_split']) * len(param_grid_rf['min_samples_leaf'])
+
+# Usando uma única barra de progresso para o loop total
+with tqdm(total=total_combinations) as pbar:
+    for n_estimators in param_grid_rf['n_estimators']:
+        for max_depth in param_grid_rf['max_depth']:
+            for min_samples_split in param_grid_rf['min_samples_split']:
+                for min_samples_leaf in param_grid_rf['min_samples_leaf']:
+                    mse_rf, rmse_rf, mae_rf, mape_rf = train_and_evaluate_rf(n_estimators, max_depth, min_samples_split, min_samples_leaf)
+                    if mse_rf < best_mse_rf:
+                        best_mse_rf = mse_rf
+                        best_rmse_rf = rmse_rf
+                        best_mae_rf = mae_rf
+                        best_mape_rf = mape_rf
+                        best_params_rf = (n_estimators, max_depth, min_samples_split, min_samples_leaf)
+                    pbar.update(1)
 
 # Salvar os resultados em um arquivo CSV
 results = {
